@@ -58,7 +58,7 @@ if (Documentation.Summary.Count > 0)
             this.Write("\n");
             
             #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Documentation.Summary.ToMarkdown(StepInput.SDProject.Tokens)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(Documentation.Summary.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken)));
             
             #line default
             #line hidden
@@ -84,10 +84,17 @@ if (Documentation.TypeParams.Count > 0)
             
             #line default
             #line hidden
-            this.Write("\n\n");
+            this.Write("\n\n**");
             
             #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(typeParam.Value.ToMarkdown(StepInput.SDProject.Tokens)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(typeParam.Key));
+            
+            #line default
+            #line hidden
+            this.Write("**\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(typeParam.Value.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken)));
             
             #line default
             #line hidden
@@ -114,10 +121,17 @@ if (Documentation.Params.Count > 0)
             
             #line default
             #line hidden
-            this.Write("\n\n");
+            this.Write("\n\n**");
             
             #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(parameter.Value.ToMarkdown(StepInput.SDProject.Tokens)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(parameter.Key));
+            
+            #line default
+            #line hidden
+            this.Write("**\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(parameter.Value.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken)));
             
             #line default
             #line hidden
@@ -137,7 +151,7 @@ if (Documentation.Returns.ContainsKey("default"))
             this.Write("\n\n#### Returns\n\n");
             
             #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Documentation.Returns["default"].ToMarkdown(StepInput.SDProject.Tokens)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(Documentation.Returns["default"].ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken)));
             
             #line default
             #line hidden
@@ -163,10 +177,17 @@ if (Documentation.Exceptions.Count > 0)
             
             #line default
             #line hidden
-            this.Write("\n\n");
+            this.Write("\n\n**");
             
             #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(exception.Value.ToMarkdown(StepInput.SDProject.Tokens)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(parameter.Key));
+            
+            #line default
+            #line hidden
+            this.Write("**\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(exception.Value.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken)));
             
             #line default
             #line hidden
@@ -186,7 +207,7 @@ if (Documentation.Example.Count > 0)
             this.Write("\n\n#### Examples\n\n");
             
             #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Documentation.Example.ToMarkdown(StepInput.SDProject.Tokens)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(Documentation.Example.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken)));
             
             #line default
             #line hidden
@@ -205,7 +226,7 @@ if (Documentation.Remarks.Count > 0)
             this.Write("\n\n#### Remarks\n\n");
             
             #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Documentation.Remarks.ToMarkdown(StepInput.SDProject.Tokens)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(Documentation.Remarks.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken)));
             
             #line default
             #line hidden
@@ -239,7 +260,7 @@ if (Documentation.SeeAlsos.Count > 0 )
             
             #line default
             #line hidden
-            this.Write("](./seeAlso.Identifier)\n");
+            this.Write("](#)\n");
             
             #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
 

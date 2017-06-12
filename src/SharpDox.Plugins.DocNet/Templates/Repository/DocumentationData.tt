@@ -16,7 +16,7 @@
 if (Documentation.Summary.Count > 0) 
 {
 #>
-<#= Documentation.Summary.ToMarkdown(StepInput.SDProject.Tokens) #>
+<#= Documentation.Summary.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken) #>
 <#
 } 
 
@@ -31,7 +31,8 @@ if (Documentation.TypeParams.Count > 0)
 	{
 #>
 
-<#= typeParam.Value.ToMarkdown(StepInput.SDProject.Tokens) #>
+**<#= typeParam.Key #>**
+<#= typeParam.Value.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken) #>
 
 <#
 	}	
@@ -48,7 +49,8 @@ if (Documentation.Params.Count > 0)
 	{
 #>
 
-<#= parameter.Value.ToMarkdown(StepInput.SDProject.Tokens) #>
+**<#= parameter.Key #>**
+<#= parameter.Value.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken) #>
 
 <#
 	}
@@ -60,7 +62,7 @@ if (Documentation.Returns.ContainsKey("default"))
 
 #### Returns
 
-<#= Documentation.Returns["default"].ToMarkdown(StepInput.SDProject.Tokens) #>
+<#= Documentation.Returns["default"].ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken) #>
 
 <#
 }
@@ -76,7 +78,8 @@ if (Documentation.Exceptions.Count > 0)
 	{
 #>
 
-<#= exception.Value.ToMarkdown(StepInput.SDProject.Tokens) #>
+**<#= parameter.Key #>**
+<#= exception.Value.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken) #>
 
 <#
 	}
@@ -88,7 +91,7 @@ if (Documentation.Example.Count > 0)
 
 #### Examples
 
-<#= Documentation.Example.ToMarkdown(StepInput.SDProject.Tokens) #>
+<#= Documentation.Example.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken) #>
 
 <#
 }
@@ -99,7 +102,7 @@ if (Documentation.Remarks.Count > 0)
 
 #### Remarks
 
-<#= Documentation.Remarks.ToMarkdown(StepInput.SDProject.Tokens) #>
+<#= Documentation.Remarks.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken) #>
 
 <#
 }
@@ -115,7 +118,7 @@ if (Documentation.SeeAlsos.Count > 0 )
 	{
 		var seeAlso = (SDSeeToken)sdToken;
 #>
-[<#= seeAlso.Name #>](./seeAlso.Identifier)
+[<#= seeAlso.Name #>](#)
 <#
     }
 } 

@@ -15,9 +15,10 @@ namespace SharpDox.Plugins.DocNet
         public static string TransformLinkToken(string linkType, string identifier)
         {
             var link = string.Empty;
+
             if (linkType == "image")
             {
-                link = $"./images/{identifier}";
+                link = $"/images/{identifier}";
             }
             else if (linkType == "namespace")
             {
@@ -42,6 +43,7 @@ namespace SharpDox.Plugins.DocNet
                 var splittedId = regEx.Split(identifierWithoutPrefix);
                 link = $"#/type/{string.Join(".", splittedId.Take(splittedId.Length - 1)).Trim('.').RemoveIllegalPathChars()}/{identifier.RemoveIllegalHtmlIdChars()}";
             }
+
             return link;
         }
     }

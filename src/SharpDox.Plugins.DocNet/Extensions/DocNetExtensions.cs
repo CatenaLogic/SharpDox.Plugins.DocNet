@@ -43,6 +43,13 @@ namespace SharpDox.Plugins.DocNet
             var typeNamespace = type.Namespace;
             var typeNamespaceFullName = typeNamespace.Fullname.Replace("GlobalNamespace", string.Empty);
 
+            var assembly = type.Namespace?.Assemblyname;
+            if (string.IsNullOrWhiteSpace(assembly))
+            {
+                // We can't resolve it
+                return string.Empty;
+            }
+
             // A directory consists of [assembly]/[namespace] (e.g. catel-core/catel/logging/)
             var assemblyNameForPath = $"{typeNamespace.Assemblyname.RemoveIllegalPathChars()}";
             var namespaceForPath = string.Join(Path.DirectorySeparatorChar.ToString(), typeNamespaceFullName.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries));

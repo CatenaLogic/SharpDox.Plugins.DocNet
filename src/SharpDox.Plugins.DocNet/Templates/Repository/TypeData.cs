@@ -46,14 +46,21 @@ namespace SharpDox.Plugins.DocNet.Templates.Repository
             this.Write("\n");
             this.Write("\n");
             this.Write("\n");
-            this.Write("\n\n");
+            this.Write("\n\n# ");
             
             #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture($"#{Type.Name}"));
+            this.Write(this.ToStringHelper.ToStringWithCulture(Type.Name));
             
             #line default
             #line hidden
             this.Write("\n\nName|Value\n---|---\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture($"Assembly|{Type.Namespace.Assembly}"));
+            
+            #line default
+            #line hidden
+            this.Write("\n");
             
             #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture($"Namespace|{Type.Namespace.Fullname}"));
@@ -63,7 +70,7 @@ namespace SharpDox.Plugins.DocNet.Templates.Repository
             this.Write("\n");
             
             #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture($"Available on|{string.Join(", ", TargetFxs.Select(x => x.Name))}"));
+            this.Write(this.ToStringHelper.ToStringWithCulture($"Available on|{string.Join(", ", TargetFxs.OrderBy(x => x.Name).Select(x => x.Name))}"));
             
             #line default
             #line hidden

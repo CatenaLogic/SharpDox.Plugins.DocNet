@@ -12,12 +12,13 @@
 <#@ import namespace="SharpDox.Plugins.DocNet.Steps" #>
 <#@ import namespace="SharpDox.UML" #>
 
-<#= $"#{Type.Name}" #>
+# <#= Type.Name #>
 
 Name|Value
 ---|---
+<#= $"Assembly|{Type.Namespace.Assembly}" #>
 <#= $"Namespace|{Type.Namespace.Fullname}" #>
-<#= $"Available on|{string.Join(", ", TargetFxs.Select(x => x.Name))}" #>
+<#= $"Available on|{string.Join(", ", TargetFxs.OrderBy(x => x.Name).Select(x => x.Name))}" #>
 
 
 ```
