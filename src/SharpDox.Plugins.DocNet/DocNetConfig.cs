@@ -17,8 +17,20 @@ namespace SharpDox.Plugins.DocNet
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private bool? _ignorePrivateMembers;
         //private string _primaryColor;
         //private string _secondaryColor;
+
+        [Name(typeof(DocNetStrings), nameof(IgnorePrivateMembers))]
+        public bool IgnorePrivateMembers
+        {
+            get { return _ignorePrivateMembers ?? true; }
+            set
+            {
+                _ignorePrivateMembers = value;
+                OnPropertyChanged(nameof(IgnorePrivateMembers));
+            }
+        }
 
         //[Name(typeof(DocNetStrings), nameof(PrimaryColor))]
         //[ConfigEditor(EditorType.Colorpicker)]

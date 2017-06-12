@@ -170,6 +170,11 @@ if (Type.Fields.Count > 0)
 
 	foreach (var sdField in Type.Fields)
 	{
+		if (IgnorePrivateMembers && sdField.Accessibility.IsPrivateMember())
+		{
+			continue;
+		}
+
 
             
             #line default
@@ -202,6 +207,11 @@ if (Type.Constructors.Count > 0)
 
 	foreach (var sdConstructor in Type.Constructors)
 	{
+		if (IgnorePrivateMembers && sdConstructor.Accessibility.IsPrivateMember())
+		{
+			continue;
+		}
+
 
             
             #line default
@@ -234,6 +244,11 @@ if (Type.Properties.Count > 0)
 
 	foreach (var sdProperty in Type.Properties)
 	{
+		if (IgnorePrivateMembers && sdProperty.Accessibility.IsPrivateMember())
+		{
+			continue;
+		}
+
 
             
             #line default
@@ -266,6 +281,11 @@ if (Type.Events.Count > 0)
 
 	foreach (var sdEvent in Type.Events)
 	{
+		if (IgnorePrivateMembers && sdEvent.Accessibility.IsPrivateMember())
+		{
+			continue;
+		}
+
 
             
             #line default
@@ -298,6 +318,11 @@ if (Type.Methods.Count > 0)
 
 	foreach (var sdMethod in Type.Methods)
 	{
+		if (IgnorePrivateMembers && sdMethod.Accessibility.IsPrivateMember())
+		{
+			continue;
+		}
+
 
             
             #line default
@@ -328,6 +353,7 @@ if (Type.Methods.Count > 0)
 	
 public SDType Type { get; set; }
 public SDTargetFx[] TargetFxs { get; set; }
+public bool IgnorePrivateMembers { get; set; }
 
         
         #line default

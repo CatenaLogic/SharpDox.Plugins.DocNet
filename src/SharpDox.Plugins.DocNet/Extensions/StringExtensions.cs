@@ -13,6 +13,11 @@ namespace SharpDox.Plugins.DocNet
 
     internal static class StringExtensions
     {
+        public static bool IsPrivateMember(this string accessibility)
+        {
+            return !accessibility.Contains("public");
+        }
+
         public static string ToObjectString(this string text)
         {
             var trimmedText = text.Trim();
