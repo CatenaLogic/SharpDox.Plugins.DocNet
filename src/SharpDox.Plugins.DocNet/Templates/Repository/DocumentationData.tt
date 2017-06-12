@@ -11,47 +11,115 @@
 <#@ import namespace="SharpDox.Model.Documentation.Article" #>
 <#@ import namespace="SharpDox.Plugins.DocNet.Steps" #>
 
-<# var documentation = new List<string>();
-if(Documentation.Summary.Count > 0) {
-	documentation.Add(string.Format("\"summary\":\"{0}\"", Documentation.Summary.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken).ToObjectString()));
+<# 
+
+if (Documentation.Summary.Count > 0) 
+{
+#>
+<#= Documentation.Summary.ToMarkdown(StepInput.SDProject.Tokens) #>
+<#
 } 
-if(Documentation.Remarks.Count > 0) {
-	documentation.Add(string.Format("\"remarks\":\"{0}\"", Documentation.Remarks.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken).ToObjectString()));
+
+if (Documentation.TypeParams.Count > 0) 
+{
+#>
+
+#### Type Parameters
+
+<#
+	foreach (var typeParam in Documentation.TypeParams)
+	{
+#>
+
+<#= typeParam.Value.ToMarkdown(StepInput.SDProject.Tokens) #>
+
+<#
+	}	
 }
-if(Documentation.Example.Count > 0) {
-	documentation.Add(string.Format("\"example\":\"{0}\"", Documentation.Example.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken).ToObjectString()));
+
+if (Documentation.Params.Count > 0) 
+{
+#>
+
+#### Parameters
+
+<#
+	foreach (var parameter in Documentation.Params)
+	{
+#>
+
+<#= parameter.Value.ToMarkdown(StepInput.SDProject.Tokens) #>
+
+<#
+	}
 }
-if(Documentation.Returns.ContainsKey("default")) {
-	documentation.Add(string.Format("\"returns\":\"{0}\"", Documentation.Returns["default"].ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken).ToObjectString()));
+
+if (Documentation.Returns.ContainsKey("default")) 
+{
+#>
+
+#### Returns
+
+<#= Documentation.Returns["default"].ToMarkdown(StepInput.SDProject.Tokens) #>
+
+<#
 }
-if(Documentation.Exceptions.Count > 0) {
-	documentation.Add(string.Format("\"exceptions\":[{0}]", 
-				string.Join(",", Documentation.Exceptions.Select(exception => 
-					string.Format("{{\"key\": \"{0}\",\"value\": \"{1}\"}}", exception.Key, 
-					exception.Value.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken).ToObjectString())))));
+
+if (Documentation.Exceptions.Count > 0) 
+{
+#>
+
+#### Exceptions
+
+<#
+	foreach (var exception in Documentation.Exceptions)
+	{
+#>
+
+<#= exception.Value.ToMarkdown(StepInput.SDProject.Tokens) #>
+
+<#
+	}
 }
-if(Documentation.Params.Count > 0) {
-	documentation.Add(string.Format("\"params\":[{0}]", 
-				string.Join(",", Documentation.Params.Select(param => 
-					string.Format("{{\"key\": \"{0}\",\"value\": \"{1}\"}}", param.Key, 
-					param.Value.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken).ToObjectString())))));
+
+if (Documentation.Example.Count > 0) 
+{
+#>
+
+#### Examples
+
+<#= Documentation.Example.ToMarkdown(StepInput.SDProject.Tokens) #>
+
+<#
 }
-if(Documentation.TypeParams.Count > 0) {
-	documentation.Add(string.Format("\"params\":[{0}]", 
-				string.Join(",", Documentation.TypeParams.Select(typeParam => 
-					string.Format("{{\"key\": \"{0}\",\"value\": \"{1}\"}}", typeParam.Key, 
-					typeParam.Value.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken).ToObjectString())))));	
+
+if (Documentation.Remarks.Count > 0) 
+{
+#>
+
+#### Remarks
+
+<#= Documentation.Remarks.ToMarkdown(StepInput.SDProject.Tokens) #>
+
+<#
 }
-if(Documentation.SeeAlsos.Count > 0 ){
-	var seeAlsos = new List<string>();
-	foreach(var sdToken in Documentation.SeeAlsos){
+
+if (Documentation.SeeAlsos.Count > 0 )
+{
+#>
+
+**See Also***
+
+<#
+	foreach(var sdToken in Documentation.SeeAlsos)
+	{
 		var seeAlso = (SDSeeToken)sdToken;
-		seeAlsos.Add(string.Format("{{\"type\":\"type\", \"id\":\"{0}\", \"name\":\"{1}\"}}", seeAlso.Identifier, seeAlso.Name));		
+#>
+[<#= seeAlso.Name #>](./seeAlso.Identifier)
+<#
     }
-	documentation.Add(string.Format("\"seeAlsos\":[{0}]", string.Join(",", seeAlsos)));
-} #>
+} 
 
-<#= string.Join(",", documentation) #>
-
+#>
 
 <#+	public SDDocumentation Documentation { get; set; } #>

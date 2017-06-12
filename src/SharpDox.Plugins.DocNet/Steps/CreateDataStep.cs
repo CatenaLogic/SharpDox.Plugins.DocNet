@@ -7,6 +7,7 @@
 
 namespace SharpDox.Plugins.DocNet.Steps
 {
+    using System;
     using System.IO;
     using System.Linq;
     using Model.Documentation;
@@ -21,26 +22,27 @@ namespace SharpDox.Plugins.DocNet.Steps
 
         public override void RunStep()
         {
-            CreateArticleData();
             CreateNamespaceData();
             CreateTypeData();
         }
 
         private void CreateNamespaceData()
         {
-            ExecuteOnStepProgress(30);
-            foreach (var sdSolution in StepInput.SDProject.Solutions)
-            {
-                foreach (var targetFxNamespace in sdSolution.Value.GetAllSolutionNamespaces())
-                {
-                    ExecuteOnStepMessage(string.Format(StepInput.DocNetStrings.CreatingNamespaceData, targetFxNamespace.Key));
+            // Note: namespaces in DocNet are automatically created based on the __index file
 
-                    var namespaceString = string.Format("{{{0}}}", string.Join(",", targetFxNamespace.Value.Select(sdTargetNamespace =>
-                        new NamespaceData {Namespace = sdTargetNamespace.Value, TargetFx = sdTargetNamespace.Key.TargetFx}.TransformText())));
+            //ExecuteOnStepProgress(30);
+            //foreach (var sdSolution in StepInput.SDProject.Solutions)
+            //{
+            //    foreach (var targetFxNamespace in sdSolution.Value.GetAllSolutionNamespaces())
+            //    {
+            //        ExecuteOnStepMessage(string.Format(StepInput.DocNetStrings.CreatingNamespaceData, targetFxNamespace.Key));
 
-                    File.WriteAllText(Path.Combine(StepInput.OutputPath, "data", "namespaces", targetFxNamespace.Key + ".json"), namespaceString.MinifyJson());
-                }
-            }
+            //        var namespaceString = string.Format("{{{0}}}", string.Join(",", targetFxNamespace.Value.Select(sdTargetNamespace =>
+            //            new NamespaceData {Namespace = sdTargetNamespace.Value, TargetFx = sdTargetNamespace.Key.TargetFx}.TransformText())));
+
+            //        File.WriteAllText(Path.Combine(StepInput.OutputPath, "data", "namespaces", targetFxNamespace.Key + ".json"), namespaceString.MinifyJson());
+            //    }
+            //}
         }
 
         private void CreateTypeData()
@@ -52,55 +54,32 @@ namespace SharpDox.Plugins.DocNet.Steps
                 {
                     ExecuteOnStepMessage(string.Format(StepInput.DocNetStrings.CreatingTypeData, targetFxType.Key));
 
-                    var typeString = string.Format("{{{0}}}", string.Join(",", targetFxType.Value.Select(sdTargetType =>
-                        new TypeData {Type = sdTargetType.Value, TargetFx = sdTargetType.Key.TargetFx, Repository = sdTargetType.Key}.TransformText())));
+                    var firstValue = targetFxType.Value.Select(x => x.Value).FirstOrDefault();
+                    if (firstValue != null)
+                    {
+                        continue;
+                    }
 
-                    File.WriteAllText(Path.Combine(StepInput.OutputPath, "data", "types", targetFxType.Key.RemoveIllegalPathChars() + ".json"), typeString.MinifyJson());
+                    var typeNamespace = firstValue.Namespace;
+
+                    // A diretory consists of [assembly]/[namespace] (e.g. catel-core/catel/logging/)
+                    var assemblyNameForPath = $"{typeNamespace.Assemblyname.RemoveIllegalPathChars()}";
+                    var namespaceForPath = string.Join(Path.DirectorySeparatorChar.ToString(), typeNamespace.Fullname.Split(new[] {'.'}, StringSplitOptions.RemoveEmptyEntries));
+                    var fileNameForPath = firstValue.Name.RemoveIllegalPathChars();
+
+                    var fileName = Path.Combine(StepInput.OutputPath, assemblyNameForPath, namespaceForPath, fileNameForPath + ".md");
+                    var content = string.Empty;
+
+                    var typeString = targetFxType.Value.Select(sdTargetType =>
+                        new TypeData
+                        {
+                            Type = sdTargetType.Value,
+                            TargetFx = sdTargetType.Key.TargetFx,
+                            Repository = sdTargetType.Key
+                        }.TransformText());
+
+                    File.WriteAllText(fileName, content);
                 }
-            }
-        }
-
-        private void CreateArticleData()
-        {
-            ExecuteOnStepProgress(90);
-            ExecuteOnStepMessage(StepInput.DocNetStrings.CreatingArticleData);
-
-            //var projectDescription = StepInput.SDProject.Descriptions.GetElementOrDefault(StepInput.CurrentLanguage) ?? new SDTemplate(string.Empty);
-            //var homeData = new ArticleData()
-            //{
-            //    Title = "Home",
-            //    SubTitle = StepInput.DocNetStrings.Description,
-            //    Content = CommonMarkConverter.Convert(projectDescription.Transform(Helper.TransformLinkToken)).ToObjectString()
-            //};
-
-            //File.WriteAllText(Path.Combine(StepInput.OutputPath, "data", "articles", "home.json"), homeData.TransformText().MinifyJson());
-
-            var articles = StepInput.SDProject.Articles.GetElementOrDefault(StepInput.CurrentLanguage);
-            if (articles != null)
-            {
-                foreach (var article in articles)
-                {
-                    AddArticle(article);
-                }
-            }
-        }
-
-        private void AddArticle(SDArticle sdArticle)
-        {
-            if (!(sdArticle is SDArticlePlaceholder) && !(sdArticle is SDDocPlaceholder))
-            {
-                var articleData = new ArticleData
-                {
-                    Title = sdArticle.Title,
-                    Content = sdArticle.Content.Transform(Helper.TransformLinkToken)
-                };
-
-                File.WriteAllText(Path.Combine(StepInput.OutputPath, sdArticle.Id + ".md"), articleData.TransformText().MinifyJson());
-            }
-
-            foreach (var article in sdArticle.Children)
-            {
-                AddArticle(article);
             }
         }
     }

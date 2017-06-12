@@ -54,7 +54,7 @@ namespace SharpDox.Plugins.DocNet
 
             foreach (var docLanguage in sdProject.DocumentationLanguages)
             {
-                StepInput.InitStepinput(sdProject, Path.Combine(outputPath, docLanguage), docLanguage, 
+                StepInput.InitStepinput(sdProject, Path.Combine(outputPath), docLanguage, 
                     _localController.GetLocalStringsOrDefault<DocNetStrings>(docLanguage), _strings, _config);
 
                 var steps = new List<StepBase>();

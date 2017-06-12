@@ -50,61 +50,104 @@ namespace SharpDox.Plugins.DocNet.Templates.Repository
             this.Write("\n");
             this.Write("\n");
             this.Write("\n");
-            this.Write("\n\n{\n\t");
+            this.Write("\n\n");
             
             #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\MemberData.tt"
 
-	var properties = new List<string>();
-	properties.Add($"\"id\": \"{Member.Identifier}\"");
-	properties.Add($"\"urlId\": \"{Member.Identifier.RemoveIllegalHtmlIdChars()}\"");
-	properties.Add($"\"type\": \"{MemberType}\""); 
-	properties.Add($"\"accessibility\": \"{Member.Accessibility}\"");
+var method = Member as SDMethod;
+if (method != null) 
+{
 
-	if(Member is SDMethod) {
-		var sdMethod = (SDMethod)Member;
-		properties.Add($"\"name\": \"{sdMethod.Signature}\"");
-
-		if(!sdMethod.IsSequenceDiagramEmpty()) {
-			properties.Add($"\"diagramId\": \"{sdMethod.Guid}\"");
-			properties.Add($"\"sequenceDiagram\": \"{sdMethod.GetSequenceDiagram(Repository).ToSvg().Transform(Helper.TransformLinkToken).ToObjectString()}\"");
-		}
-	} else {
-		properties.Add($"\"name\": \"{Member.Name}\"");
-	}
-
-	if(Member is SDField && !string.IsNullOrEmpty(((SDField)Member).ConstantValue)) {
-		properties.Add($"\"constantValue\": \"{((SDField)Member).ConstantValue.ToObjectString()}\"");
-	}
-
-	if(Member.Region != null){
-		properties.Add($"\"region\": {{\"start\": \"{Member.Region.StartLine}\", \"end\": \"{Member.Region.EndLine}\", \"filename\": \"{Member.Region.Filename.ToObjectString()}\"}}");
-	}	
-
-	var documentation = Member.Documentations.GetElementOrDefault(StepInput.CurrentLanguage);
-	if(documentation != null){
-		var documentationTemplate = new DocumentationData { Documentation = documentation };
-		var documentationText = documentationTemplate.TransformText();
-		if(!string.IsNullOrWhiteSpace(documentationText)) properties.Add(documentationText);
-	}
-
-	properties.Add($"\"syntax\": \"{Member.Syntax}\"");
-	properties.Add($"\"linkedSyntax\": \"{Member.SyntaxTemplate.Transform(Helper.TransformLinkToken).ToObjectString()}\"");
-	
             
             #line default
             #line hidden
-            this.Write("\n\t");
+            this.Write("\n### ");
             
             #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\MemberData.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(",", properties)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(method.Signature));
             
             #line default
             #line hidden
-            this.Write("\t\t\n}\n\n");
+            this.Write("\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\MemberData.tt"
+
+} 
+else 
+{
+
+            
+            #line default
+            #line hidden
+            this.Write("\n### ");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\MemberData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Member.Name));
+            
+            #line default
+            #line hidden
+            this.Write("\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\MemberData.tt"
+
+}
+
+var fld = Member as SDField;
+if (fld != null && !string.IsNullOrEmpty(fld.ConstantValue))
+{
+
+            
+            #line default
+            #line hidden
+            
+            #line 4 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\MemberData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(fld.ConstantValue.ToObjectString()));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n");
+            
+            #line 5 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\MemberData.tt"
+
+}
+
+var documentation = Member.Documentations.GetElementOrDefault(StepInput.CurrentLanguage);
+if (documentation != null)
+{
+	var documentationTemplate = new DocumentationData 
+	{ 
+		Documentation = documentation 
+	};
+
+	var documentationText = documentationTemplate.TransformText();
+	if (!string.IsNullOrWhiteSpace(documentationText)) 
+	{
+
+            
+            #line default
+            #line hidden
+            
+            #line 18 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\MemberData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(documentationText));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n");
+            
+            #line 19 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\MemberData.tt"
+
+	}
+}
+
+
+            
+            #line default
+            #line hidden
+            this.Write("\n\n");
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\MemberData.tt"
+        #line 21 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\MemberData.tt"
 
 public SDMemberBase Member { get; set; }
 public string MemberType { get; set; }

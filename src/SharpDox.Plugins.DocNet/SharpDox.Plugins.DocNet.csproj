@@ -62,11 +62,6 @@
     <Compile Include="Steps\StepInput.cs" />
     <Compile Include="Steps\StepRange.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Templates\Repository\ArticleData.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ArticleData.tt</DependentUpon>
-    </Compile>
     <Compile Include="Templates\Repository\DocumentationData.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -404,10 +399,6 @@
     <Content Include="Resources\Images\struct_shortcut.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Templates\Repository\ArticleData.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>ArticleData.cs</LastGenOutput>
-    </Content>
     <Content Include="Templates\Repository\DocumentationData.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>DocumentationData.cs</LastGenOutput>
@@ -431,6 +422,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /s /f /y "$(TargetDir)\*" "C:\Source\Forks_SharpDox\src\Shells\SharpDox.GUI\bin\Debug\Plugins\docnet\"</PostBuildEvent>
+    <PostBuildEvent>xcopy /s /f /y "$(TargetDir)\$(TargetFileName)" "C:\Source\Forks_SharpDox\src\Shells\SharpDox.GUI\bin\Debug\Plugins\docnet\"
+xcopy /s /f /y "$(TargetDir)\Resources\*" "C:\Source\Forks_SharpDox\src\Shells\SharpDox.GUI\bin\Debug\Plugins\docnet\resources"</PostBuildEvent>
   </PropertyGroup>
 </Project>

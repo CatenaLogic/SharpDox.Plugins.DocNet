@@ -14,46 +14,47 @@
 <#@ import namespace="SharpDox.Model.Documentation.Article" #>
 <#@ import namespace="SharpDox.Plugins.DocNet.Steps" #>
 
+<#
+var method = Member as SDMethod;
+if (method != null) 
 {
-	<#
-	var properties = new List<string>();
-	properties.Add($"\"id\": \"{Member.Identifier}\"");
-	properties.Add($"\"urlId\": \"{Member.Identifier.RemoveIllegalHtmlIdChars()}\"");
-	properties.Add($"\"type\": \"{MemberType}\""); 
-	properties.Add($"\"accessibility\": \"{Member.Accessibility}\"");
-
-	if(Member is SDMethod) {
-		var sdMethod = (SDMethod)Member;
-		properties.Add($"\"name\": \"{sdMethod.Signature}\"");
-
-		if(!sdMethod.IsSequenceDiagramEmpty()) {
-			properties.Add($"\"diagramId\": \"{sdMethod.Guid}\"");
-			properties.Add($"\"sequenceDiagram\": \"{sdMethod.GetSequenceDiagram(Repository).ToSvg().Transform(Helper.TransformLinkToken).ToObjectString()}\"");
-		}
-	} else {
-		properties.Add($"\"name\": \"{Member.Name}\"");
-	}
-
-	if(Member is SDField && !string.IsNullOrEmpty(((SDField)Member).ConstantValue)) {
-		properties.Add($"\"constantValue\": \"{((SDField)Member).ConstantValue.ToObjectString()}\"");
-	}
-
-	if(Member.Region != null){
-		properties.Add($"\"region\": {{\"start\": \"{Member.Region.StartLine}\", \"end\": \"{Member.Region.EndLine}\", \"filename\": \"{Member.Region.Filename.ToObjectString()}\"}}");
-	}	
-
-	var documentation = Member.Documentations.GetElementOrDefault(StepInput.CurrentLanguage);
-	if(documentation != null){
-		var documentationTemplate = new DocumentationData { Documentation = documentation };
-		var documentationText = documentationTemplate.TransformText();
-		if(!string.IsNullOrWhiteSpace(documentationText)) properties.Add(documentationText);
-	}
-
-	properties.Add($"\"syntax\": \"{Member.Syntax}\"");
-	properties.Add($"\"linkedSyntax\": \"{Member.SyntaxTemplate.Transform(Helper.TransformLinkToken).ToObjectString()}\"");
-	#>
-	<#= string.Join(",", properties) #>		
+#>
+### <#= method.Signature #>
+<#
+} 
+else 
+{
+#>
+### <#= Member.Name #>
+<#
 }
+
+var fld = Member as SDField;
+if (fld != null && !string.IsNullOrEmpty(fld.ConstantValue))
+{
+#>
+<#= fld.ConstantValue.ToObjectString() #>
+<#
+}
+
+var documentation = Member.Documentations.GetElementOrDefault(StepInput.CurrentLanguage);
+if (documentation != null)
+{
+	var documentationTemplate = new DocumentationData 
+	{ 
+		Documentation = documentation 
+	};
+
+	var documentationText = documentationTemplate.TransformText();
+	if (!string.IsNullOrWhiteSpace(documentationText)) 
+	{
+#>
+<#= documentationText #>
+<#
+	}
+}
+
+#>
 
 <#+
 public SDMemberBase Member { get; set; }

@@ -20,10 +20,13 @@ namespace SharpDox.Plugins.DocNet.Steps
 
         public override void RunStep()
         {
+            var assemblyPath = Path.GetDirectoryName(GetType().Assembly.Location);
+
+            CopyFolder(Path.Combine(assemblyPath, "resources", "images"), Path.Combine(StepInput.OutputPath, "images"));
             CopyImages(StepInput.SDProject.Images, Path.Combine(StepInput.OutputPath, "images"));
         }
 
-        private void CopyFolder(string input, string output)
+        private void CopyFolder(string input, string output, bool recursive = true)
         {
             EnsureFolder(output);
 
@@ -33,9 +36,12 @@ namespace SharpDox.Plugins.DocNet.Steps
                 File.Copy(file, Path.Combine(output, Path.GetFileName(file)), true);
             }
 
-            foreach (var dir in Directory.EnumerateDirectories(input))
+            if (recursive)
             {
-                CopyFolder(dir, Path.Combine(output, Path.GetFileName(dir)));
+                foreach (var dir in Directory.EnumerateDirectories(input))
+                {
+                    CopyFolder(dir, Path.Combine(output, Path.GetFileName(dir)));
+                }
             }
         }
 

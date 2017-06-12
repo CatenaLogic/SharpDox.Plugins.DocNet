@@ -46,76 +46,154 @@ namespace SharpDox.Plugins.DocNet.Templates.Repository
             this.Write("\n");
             this.Write("\n");
             this.Write("\n");
-            this.Write("\n\n\"");
+            this.Write("\n\n");
             
             #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TargetFx.Name));
+            this.Write(this.ToStringHelper.ToStringWithCulture($"#{Type.Name}"));
             
             #line default
             #line hidden
-            this.Write("\": { \n\t\t");
+            this.Write("\n\nName|Value\n---|---\n");
             
             #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
-
-		var properties = new List<string>();
-		properties.Add($"\"name\": \"{Type.Name}\"");
-		properties.Add($"\"namespace\": \"{Type.Namespace.Fullname}\"");
-		properties.Add($"\"syntax\": \"{Type.Syntax}\"");
-		properties.Add($"\"linkedSyntax\": \"{Type.SyntaxTemplate.Transform(Helper.TransformLinkToken).ToObjectString()}\"");
-
-		if(Type.BaseTypes.Count > 0) {
-			var baseTypes = string.Join(",", Type.BaseTypes.Select(baseType => 
-				string.Format("{{\"id\": \"{0}\",\"name\": \"{1}\"}}", baseType.Type.Identifier, baseType.Type.Fullname)));
-
-			properties.Add($"\"baseTypes\": [ {baseTypes} ]");
-		} 
-		if(Type.ImplementedInterfaces.Count > 0) {
-			var implements = string.Join(",", Type.ImplementedInterfaces.Select(implementedInterface => 
-				string.Format("{{\"id\": \"{0}\",\"name\": \"{1}\"}}", implementedInterface.Type.Identifier, implementedInterface.Type.Fullname)));
-
-			properties.Add($"\"implements\": [ {implements} ]");
-		}
-
-		var documentation = Type.Documentations.GetElementOrDefault(StepInput.CurrentLanguage);
-		if(documentation != null){
-			var documentationTemplate = new DocumentationData { Documentation = documentation };
-			var documentationText = documentationTemplate.TransformText();
-			if(!string.IsNullOrWhiteSpace(documentationText)) properties.Add(documentationText);
-		}
-		
-		if(Type.Fields.Count > 0) {
-			properties.Add(string.Format("\"fields\": [{0}]", string.Join(",", Type.Fields.Select(sdField => new MemberData { Member = sdField, MemberType = "field", Repository = Repository }.TransformText()))));
-		} 
-		if(Type.Constructors.Count > 0) {
-			properties.Add(string.Format("\"constructors\": [{0}]", string.Join(",", Type.Constructors.Select(sdContructor => new MemberData { Member = sdContructor, MemberType = "method", Repository = Repository }.TransformText()))));
-		}
-		if(Type.Methods.Count > 0) {
-			properties.Add(string.Format("\"methods\": [{0}]", string.Join(",", Type.Methods.Select(sdMethod => new MemberData { Member = sdMethod, MemberType = "method", Repository = Repository }.TransformText()))));
-		}
-		if(Type.Events.Count > 0) {
-			properties.Add(string.Format("\"events\": [{0}]", string.Join(",", Type.Events.Select(sdEvent => new MemberData { Member = sdEvent, MemberType = "event", Repository = Repository }.TransformText()))));
-		}
-		if(Type.Properties.Count > 0){
-			properties.Add(string.Format("\"properties\": [{0}]", string.Join(",", Type.Properties.Select(sdProperty => new MemberData { Member = sdProperty, MemberType = "property", Repository = Repository }.TransformText()))));	
-		} 
+            this.Write(this.ToStringHelper.ToStringWithCulture($"Namespace|{Type.Namespace.Fullname}"));
             
             #line default
             #line hidden
-            this.Write("\n\n\t\t");
+            this.Write("\n");
             
             #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(",", properties)));
+            this.Write(this.ToStringHelper.ToStringWithCulture($"Available on|{string.Join(", ", TargetFxs.Select(x => x))}"));
             
             #line default
             #line hidden
-            this.Write("\t\n\t}\n\n");
+            this.Write("\n\n\n```\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture($"{Type.Syntax}"));
+            
+            #line default
+            #line hidden
+            this.Write("\n```\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+
+
+// Fields
+if (Type.Fields.Count > 0) 
+{
+
+            
+            #line default
+            #line hidden
+            this.Write("\n\n## Fields\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Type.Constructors.Select(sdField => new MemberData { Member = sdField, MemberType = "field", Repository = Repository }.TransformText())));
+            
+            #line default
+            #line hidden
+            this.Write("\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+
+} 
+
+
+// Constructors
+if (Type.Constructors.Count > 0) 
+{
+
+            
+            #line default
+            #line hidden
+            this.Write("\n\n## Constructors\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Type.Constructors.Select(sdContructor => new MemberData { Member = sdContructor, MemberType = "method", Repository = Repository }.TransformText())));
+            
+            #line default
+            #line hidden
+            this.Write("\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+
+}
+
+
+// Properties
+if (Type.Properties.Count > 0)
+{
+
+            
+            #line default
+            #line hidden
+            this.Write("\n\n## Properties\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Type.Properties.Select(sdProperty => new MemberData { Member = sdProperty, MemberType = "property", Repository = Repository }.TransformText())));
+            
+            #line default
+            #line hidden
+            this.Write("\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+
+} 
+
+
+// Events
+if (Type.Events.Count > 0) 
+{
+
+            
+            #line default
+            #line hidden
+            this.Write("\n\n## Events\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Type.Events.Select(sdEvent => new MemberData { Member = sdEvent, MemberType = "event", Repository = Repository }.TransformText())));
+            
+            #line default
+            #line hidden
+            this.Write("\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+
+}
+
+
+// Methods
+if (Type.Methods.Count > 0) 
+{
+
+            
+            #line default
+            #line hidden
+            this.Write("\n\n## Methods\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Type.Methods.Select(sdMethod => new MemberData { Member = sdMethod, MemberType = "method", Repository = Repository }.TransformText())));
+            
+            #line default
+            #line hidden
+            this.Write("\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+
+}
+
+            
+            #line default
+            #line hidden
+            this.Write("\n\n\n");
             return this.GenerationEnvironment.ToString();
         }
         
         #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
 	
 public SDType Type { get; set; }
-public SDTargetFx TargetFx { get; set; }
+public SDTargetFx[] TargetFxs { get; set; }
 public SDRepository Repository { get; set; } 
 
         

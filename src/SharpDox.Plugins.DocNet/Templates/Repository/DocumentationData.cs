@@ -47,56 +47,210 @@ namespace SharpDox.Plugins.DocNet.Templates.Repository
             this.Write("\n\n");
             
             #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
- var documentation = new List<string>();
-if(Documentation.Summary.Count > 0) {
-	documentation.Add(string.Format("\"summary\":\"{0}\"", Documentation.Summary.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken).ToObjectString()));
+ 
+
+if (Documentation.Summary.Count > 0) 
+{
+
+            
+            #line default
+            #line hidden
+            this.Write("\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Documentation.Summary.ToMarkdown(StepInput.SDProject.Tokens)));
+            
+            #line default
+            #line hidden
+            this.Write("\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
+
 } 
-if(Documentation.Remarks.Count > 0) {
-	documentation.Add(string.Format("\"remarks\":\"{0}\"", Documentation.Remarks.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken).ToObjectString()));
-}
-if(Documentation.Example.Count > 0) {
-	documentation.Add(string.Format("\"example\":\"{0}\"", Documentation.Example.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken).ToObjectString()));
-}
-if(Documentation.Returns.ContainsKey("default")) {
-	documentation.Add(string.Format("\"returns\":\"{0}\"", Documentation.Returns["default"].ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken).ToObjectString()));
-}
-if(Documentation.Exceptions.Count > 0) {
-	documentation.Add(string.Format("\"exceptions\":[{0}]", 
-				string.Join(",", Documentation.Exceptions.Select(exception => 
-					string.Format("{{\"key\": \"{0}\",\"value\": \"{1}\"}}", exception.Key, 
-					exception.Value.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken).ToObjectString())))));
-}
-if(Documentation.Params.Count > 0) {
-	documentation.Add(string.Format("\"params\":[{0}]", 
-				string.Join(",", Documentation.Params.Select(param => 
-					string.Format("{{\"key\": \"{0}\",\"value\": \"{1}\"}}", param.Key, 
-					param.Value.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken).ToObjectString())))));
-}
-if(Documentation.TypeParams.Count > 0) {
-	documentation.Add(string.Format("\"params\":[{0}]", 
-				string.Join(",", Documentation.TypeParams.Select(typeParam => 
-					string.Format("{{\"key\": \"{0}\",\"value\": \"{1}\"}}", typeParam.Key, 
-					typeParam.Value.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken).ToObjectString())))));	
-}
-if(Documentation.SeeAlsos.Count > 0 ){
-	var seeAlsos = new List<string>();
-	foreach(var sdToken in Documentation.SeeAlsos){
-		var seeAlso = (SDSeeToken)sdToken;
-		seeAlsos.Add(string.Format("{{\"type\":\"type\", \"id\":\"{0}\", \"name\":\"{1}\"}}", seeAlso.Identifier, seeAlso.Name));		
-    }
-	documentation.Add(string.Format("\"seeAlsos\":[{0}]", string.Join(",", seeAlsos)));
-} 
+
+if (Documentation.TypeParams.Count > 0) 
+{
+
+            
+            #line default
+            #line hidden
+            this.Write("\n\n#### Type Parameters\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
+
+	foreach (var typeParam in Documentation.TypeParams)
+	{
+
             
             #line default
             #line hidden
             this.Write("\n\n");
             
             #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(",", documentation)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(typeParam.Value.ToMarkdown(StepInput.SDProject.Tokens)));
             
             #line default
             #line hidden
-            this.Write("\n\n\n");
+            this.Write("\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
+
+	}	
+}
+
+if (Documentation.Params.Count > 0) 
+{
+
+            
+            #line default
+            #line hidden
+            this.Write("\n\n#### Parameters\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
+
+	foreach (var parameter in Documentation.Params)
+	{
+
+            
+            #line default
+            #line hidden
+            this.Write("\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(parameter.Value.ToMarkdown(StepInput.SDProject.Tokens)));
+            
+            #line default
+            #line hidden
+            this.Write("\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
+
+	}
+}
+
+if (Documentation.Returns.ContainsKey("default")) 
+{
+
+            
+            #line default
+            #line hidden
+            this.Write("\n\n#### Returns\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Documentation.Returns["default"].ToMarkdown(StepInput.SDProject.Tokens)));
+            
+            #line default
+            #line hidden
+            this.Write("\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
+
+}
+
+if (Documentation.Exceptions.Count > 0) 
+{
+
+            
+            #line default
+            #line hidden
+            this.Write("\n\n#### Exceptions\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
+
+	foreach (var exception in Documentation.Exceptions)
+	{
+
+            
+            #line default
+            #line hidden
+            this.Write("\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(exception.Value.ToMarkdown(StepInput.SDProject.Tokens)));
+            
+            #line default
+            #line hidden
+            this.Write("\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
+
+	}
+}
+
+if (Documentation.Example.Count > 0) 
+{
+
+            
+            #line default
+            #line hidden
+            this.Write("\n\n#### Examples\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Documentation.Example.ToMarkdown(StepInput.SDProject.Tokens)));
+            
+            #line default
+            #line hidden
+            this.Write("\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
+
+}
+
+if (Documentation.Remarks.Count > 0) 
+{
+
+            
+            #line default
+            #line hidden
+            this.Write("\n\n#### Remarks\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Documentation.Remarks.ToMarkdown(StepInput.SDProject.Tokens)));
+            
+            #line default
+            #line hidden
+            this.Write("\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
+
+}
+
+if (Documentation.SeeAlsos.Count > 0 )
+{
+
+            
+            #line default
+            #line hidden
+            this.Write("\n\n**See Also***\n\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
+
+	foreach(var sdToken in Documentation.SeeAlsos)
+	{
+		var seeAlso = (SDSeeToken)sdToken;
+
+            
+            #line default
+            #line hidden
+            this.Write("\n[");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(seeAlso.Name));
+            
+            #line default
+            #line hidden
+            this.Write("](./seeAlso.Identifier)\n");
+            
+            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
+
+    }
+} 
+
+
+            
+            #line default
+            #line hidden
+            this.Write("\n\n");
             return this.GenerationEnvironment.ToString();
         }
         
