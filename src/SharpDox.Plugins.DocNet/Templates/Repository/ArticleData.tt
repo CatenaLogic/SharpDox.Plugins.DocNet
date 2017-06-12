@@ -1,0 +1,17 @@
+﻿<#@ template language="C#" debug="False" #>
+<#@ assembly name="System.Core" #>
+
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Net" #>
+<#@ import namespace="System.Collections.Generic" #>
+
+{
+	"title":"<#= Title #>",
+	<# if(SubTitle != null) { #>
+	"subTitle": "<#= SubTitle #>",
+	<# } #>
+	"content": "<#= Content #>"
+}
+
+<#+ public string Title { get; set; } #><#+ public string SubTitle { get; set; } #><#+ public string Content { get; set; } #>
