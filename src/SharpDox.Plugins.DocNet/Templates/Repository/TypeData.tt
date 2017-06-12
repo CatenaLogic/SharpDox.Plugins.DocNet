@@ -17,7 +17,7 @@
 Name|Value
 ---|---
 <#= $"Namespace|{Type.Namespace.Fullname}" #>
-<#= $"Available on|{string.Join(", ", TargetFxs.Select(x => x))}" #>
+<#= $"Available on|{string.Join(", ", TargetFxs.Select(x => x.Name))}" #>
 
 
 ```
@@ -26,6 +26,47 @@ Name|Value
 
 <#
 
+// Base types
+if (Type.BaseTypes.Count > 0) 
+{
+#>
+**Base types**
+<#= string.Join(",", Type.BaseTypes.Select(baseType => string.Format("[{0}]({1})", baseType.Type.Name, baseType.Type.ResolvePath()))) #>
+
+<#
+} 
+
+
+// Interfaces
+if (Type.ImplementedInterfaces.Count > 0) 
+{
+#>
+**Base types**
+
+<#= string.Join(",", Type.ImplementedInterfaces.Select(baseType => string.Format("[{0}]({1})", baseType.Type.Name, baseType.Type.ResolvePath()))) #>
+
+<#
+} 
+
+
+// Documentation
+var documentation = Type.Documentations.GetElementOrDefault(StepInput.CurrentLanguage);
+if (documentation != null)
+{
+	var documentationTemplate = new DocumentationData 
+	{ 
+		Documentation = documentation
+	};
+
+	var documentationText = documentationTemplate.TransformText();
+	if (!string.IsNullOrWhiteSpace(documentationText)) 
+	{
+#>
+<#= documentationText #>
+<#
+	}
+}
+
 // Fields
 if (Type.Fields.Count > 0) 
 {
@@ -33,9 +74,14 @@ if (Type.Fields.Count > 0)
 
 ## Fields
 
-<#= Type.Constructors.Select(sdField => new MemberData { Member = sdField, MemberType = "field", Repository = Repository }.TransformText()) #>
 <#
-} 
+	foreach (var sdField in Type.Fields)
+	{
+#>
+<#= new MemberData { Member = sdField, MemberType = "field" }.TransformText() #>
+<#
+	} 
+}
 
 
 // Constructors
@@ -45,8 +91,13 @@ if (Type.Constructors.Count > 0)
 
 ## Constructors
 
-<#= Type.Constructors.Select(sdContructor => new MemberData { Member = sdContructor, MemberType = "method", Repository = Repository }.TransformText()) #>
 <#
+	foreach (var sdConstructor in Type.Constructors)
+	{
+#>
+<#= new MemberData { Member = sdConstructor, MemberType = "method" }.TransformText() #>
+<#
+	} 
 }
 
 
@@ -57,9 +108,13 @@ if (Type.Properties.Count > 0)
 
 ## Properties
 
-<#= Type.Properties.Select(sdProperty => new MemberData { Member = sdProperty, MemberType = "property", Repository = Repository }.TransformText()) #>
-
 <#
+	foreach (var sdProperty in Type.Properties)
+	{
+#>
+<#= new MemberData { Member = sdProperty, MemberType = "property" }.TransformText() #>
+<#
+	}
 } 
 
 
@@ -70,9 +125,13 @@ if (Type.Events.Count > 0)
 
 ## Events
 
-<#= Type.Events.Select(sdEvent => new MemberData { Member = sdEvent, MemberType = "event", Repository = Repository }.TransformText()) #>
-
 <#
+	foreach (var sdEvent in Type.Events)
+	{
+#>
+<#= new MemberData { Member = sdEvent, MemberType = "event" }.TransformText() #>
+<#
+	} 
 }
 
 
@@ -83,15 +142,19 @@ if (Type.Methods.Count > 0)
 
 ## Methods
 
-<#= Type.Methods.Select(sdMethod => new MemberData { Member = sdMethod, MemberType = "method", Repository = Repository }.TransformText()) #>
-
 <#
+	foreach (var sdMethod in Type.Methods)
+	{
+#>
+<#= new MemberData { Member = sdMethod, MemberType = "method" }.TransformText() #>
+<#
+	}
 }
+
 #>
 
 
 <#+	
 public SDType Type { get; set; }
 public SDTargetFx[] TargetFxs { get; set; }
-public SDRepository Repository { get; set; } 
 #>

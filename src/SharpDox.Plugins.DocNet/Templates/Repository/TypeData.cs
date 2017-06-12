@@ -63,7 +63,7 @@ namespace SharpDox.Plugins.DocNet.Templates.Repository
             this.Write("\n");
             
             #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture($"Available on|{string.Join(", ", TargetFxs.Select(x => x))}"));
+            this.Write(this.ToStringHelper.ToStringWithCulture($"Available on|{string.Join(", ", TargetFxs.Select(x => x.Name))}"));
             
             #line default
             #line hidden
@@ -79,6 +79,77 @@ namespace SharpDox.Plugins.DocNet.Templates.Repository
             #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
 
 
+// Base types
+if (Type.BaseTypes.Count > 0) 
+{
+
+            
+            #line default
+            #line hidden
+            this.Write("**Base types**\r\n");
+            
+            #line 5 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(",", Type.BaseTypes.Select(baseType => string.Format("[{0}]({1})", baseType.Type.Name, baseType.Type.ResolvePath())))));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\r\n");
+            
+            #line 7 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+
+} 
+
+
+// Interfaces
+if (Type.ImplementedInterfaces.Count > 0) 
+{
+
+            
+            #line default
+            #line hidden
+            this.Write("**Base types**\r\n\r\n");
+            
+            #line 13 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(",", Type.ImplementedInterfaces.Select(baseType => string.Format("[{0}]({1})", baseType.Type.Name, baseType.Type.ResolvePath())))));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\r\n");
+            
+            #line 15 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+
+} 
+
+
+// Documentation
+var documentation = Type.Documentations.GetElementOrDefault(StepInput.CurrentLanguage);
+if (documentation != null)
+{
+	var documentationTemplate = new DocumentationData 
+	{ 
+		Documentation = documentation
+	};
+
+	var documentationText = documentationTemplate.TransformText();
+	if (!string.IsNullOrWhiteSpace(documentationText)) 
+	{
+
+            
+            #line default
+            #line hidden
+            
+            #line 28 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(documentationText));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n");
+            
+            #line 29 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+
+	}
+}
+
 // Fields
 if (Type.Fields.Count > 0) 
 {
@@ -88,16 +159,27 @@ if (Type.Fields.Count > 0)
             #line hidden
             this.Write("\n\n## Fields\n\n");
             
-            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Type.Constructors.Select(sdField => new MemberData { Member = sdField, MemberType = "field", Repository = Repository }.TransformText())));
+            #line 31 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+
+	foreach (var sdField in Type.Fields)
+	{
+
             
             #line default
             #line hidden
             this.Write("\n");
             
-            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+            #line 31 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(new MemberData { Member = sdField, MemberType = "field" }.TransformText()));
+            
+            #line default
+            #line hidden
+            this.Write("\n");
+            
+            #line 31 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
 
-} 
+	} 
+}
 
 
 // Constructors
@@ -109,15 +191,26 @@ if (Type.Constructors.Count > 0)
             #line hidden
             this.Write("\n\n## Constructors\n\n");
             
-            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Type.Constructors.Select(sdContructor => new MemberData { Member = sdContructor, MemberType = "method", Repository = Repository }.TransformText())));
+            #line 31 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+
+	foreach (var sdConstructor in Type.Constructors)
+	{
+
             
             #line default
             #line hidden
             this.Write("\n");
             
-            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+            #line 31 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(new MemberData { Member = sdConstructor, MemberType = "method" }.TransformText()));
+            
+            #line default
+            #line hidden
+            this.Write("\n");
+            
+            #line 31 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
 
+	} 
 }
 
 
@@ -130,15 +223,26 @@ if (Type.Properties.Count > 0)
             #line hidden
             this.Write("\n\n## Properties\n\n");
             
-            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Type.Properties.Select(sdProperty => new MemberData { Member = sdProperty, MemberType = "property", Repository = Repository }.TransformText())));
+            #line 31 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+
+	foreach (var sdProperty in Type.Properties)
+	{
+
             
             #line default
             #line hidden
-            this.Write("\n\n");
+            this.Write("\n");
             
-            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+            #line 31 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(new MemberData { Member = sdProperty, MemberType = "property" }.TransformText()));
+            
+            #line default
+            #line hidden
+            this.Write("\n");
+            
+            #line 31 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
 
+	}
 } 
 
 
@@ -151,15 +255,26 @@ if (Type.Events.Count > 0)
             #line hidden
             this.Write("\n\n## Events\n\n");
             
-            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Type.Events.Select(sdEvent => new MemberData { Member = sdEvent, MemberType = "event", Repository = Repository }.TransformText())));
+            #line 31 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+
+	foreach (var sdEvent in Type.Events)
+	{
+
             
             #line default
             #line hidden
-            this.Write("\n\n");
+            this.Write("\n");
             
-            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+            #line 31 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(new MemberData { Member = sdEvent, MemberType = "event" }.TransformText()));
+            
+            #line default
+            #line hidden
+            this.Write("\n");
+            
+            #line 31 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
 
+	} 
 }
 
 
@@ -172,16 +287,28 @@ if (Type.Methods.Count > 0)
             #line hidden
             this.Write("\n\n## Methods\n\n");
             
-            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Type.Methods.Select(sdMethod => new MemberData { Member = sdMethod, MemberType = "method", Repository = Repository }.TransformText())));
+            #line 31 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+
+	foreach (var sdMethod in Type.Methods)
+	{
+
             
             #line default
             #line hidden
-            this.Write("\n\n");
+            this.Write("\n");
             
-            #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+            #line 31 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(new MemberData { Member = sdMethod, MemberType = "method" }.TransformText()));
+            
+            #line default
+            #line hidden
+            this.Write("\n");
+            
+            #line 31 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
 
+	}
 }
+
 
             
             #line default
@@ -190,11 +317,10 @@ if (Type.Methods.Count > 0)
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
+        #line 31 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
 	
 public SDType Type { get; set; }
 public SDTargetFx[] TargetFxs { get; set; }
-public SDRepository Repository { get; set; } 
 
         
         #line default

@@ -8,10 +8,12 @@
 namespace SharpDox.Plugins.DocNet.Steps
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using Model.Documentation;
     using Model.Documentation.Article;
+    using Model.Repository;
     using Templates.Repository;
 
     internal class CreateDataStep : StepBase
@@ -48,38 +50,61 @@ namespace SharpDox.Plugins.DocNet.Steps
         private void CreateTypeData()
         {
             ExecuteOnStepProgress(60);
+
+            // Note: this isn't 100 % accurate. Best would be to create sets of data *per* target fx, then 
+            // dynamically use this. But since we are converting this to MarkDown, we need to make a decision:
+            //
+            // 1. Create single file assuming most types cover all the methods
+            // 2. Create separate files ([assembly]/[namespace]/[type]_[targetfx].md)
+            //
+            // Since we will put availability to all types (and maybe methods in the future), option 1 has been chosen 
+
+            var allTypes = new Dictionary<string, List<Tuple<SDType, SDTargetFx>>>();
+
             foreach (var sdSolution in StepInput.SDProject.Solutions)
             {
                 foreach (var targetFxType in sdSolution.Value.GetAllSolutionTypes())
                 {
-                    ExecuteOnStepMessage(string.Format(StepInput.DocNetStrings.CreatingTypeData, targetFxType.Key));
-
-                    var firstValue = targetFxType.Value.Select(x => x.Value).FirstOrDefault();
-                    if (firstValue != null)
+                    foreach (var keyValuePair in targetFxType.Value)
                     {
-                        continue;
-                    }
-
-                    var typeNamespace = firstValue.Namespace;
-
-                    // A diretory consists of [assembly]/[namespace] (e.g. catel-core/catel/logging/)
-                    var assemblyNameForPath = $"{typeNamespace.Assemblyname.RemoveIllegalPathChars()}";
-                    var namespaceForPath = string.Join(Path.DirectorySeparatorChar.ToString(), typeNamespace.Fullname.Split(new[] {'.'}, StringSplitOptions.RemoveEmptyEntries));
-                    var fileNameForPath = firstValue.Name.RemoveIllegalPathChars();
-
-                    var fileName = Path.Combine(StepInput.OutputPath, assemblyNameForPath, namespaceForPath, fileNameForPath + ".md");
-                    var content = string.Empty;
-
-                    var typeString = targetFxType.Value.Select(sdTargetType =>
-                        new TypeData
+                        var typeKey = keyValuePair.Value.Fullname;
+                        if (!allTypes.ContainsKey(typeKey))
                         {
-                            Type = sdTargetType.Value,
-                            TargetFx = sdTargetType.Key.TargetFx,
-                            Repository = sdTargetType.Key
-                        }.TransformText());
+                            allTypes[typeKey] = new List<Tuple<SDType, SDTargetFx>>();
+                        }
 
-                    File.WriteAllText(fileName, content);
+                        var targetFxs = allTypes[typeKey];
+                        targetFxs.Add(new Tuple<SDType, SDTargetFx>(keyValuePair.Value, keyValuePair.Key.TargetFx));
+                    }
                 }
+            }
+
+            foreach (var sdType in allTypes)
+            {
+                if (sdType.Value.Count == 0)
+                {
+                    continue;
+                }
+
+                var type = sdType.Value.First().Item1;
+                var targetFxs = sdType.Value.Select(x => x.Item2).ToList();
+
+                ExecuteOnStepMessage(string.Format(StepInput.DocNetStrings.CreatingTypeData, type));
+
+                var typeData = new TypeData
+                {
+                    Type = type,
+                    TargetFxs = targetFxs.ToArray()
+                };
+
+                var fileName = type.ResolvePath(StepInput.OutputPath);
+                var content = typeData.TransformText();
+                content = content.CleanUp();
+
+                var directoryName = Path.GetDirectoryName(fileName);
+                Directory.CreateDirectory(directoryName);
+
+                File.WriteAllText(fileName, content);
             }
         }
     }

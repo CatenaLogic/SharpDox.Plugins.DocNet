@@ -53,6 +53,7 @@
     <Compile Include="DocNetConfig.cs" />
     <Compile Include="DocNetExporter.cs" />
     <Compile Include="DocNetStrings.cs" />
+    <Compile Include="Extensions\DocNetExtensions.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Steps\CopyResourcesStep.cs" />

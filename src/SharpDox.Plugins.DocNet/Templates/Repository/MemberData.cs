@@ -151,7 +151,6 @@ if (documentation != null)
 
 public SDMemberBase Member { get; set; }
 public string MemberType { get; set; }
-public SDRepository Repository { get; set; } 
 
         
         #line default
