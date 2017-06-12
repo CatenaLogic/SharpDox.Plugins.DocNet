@@ -16,7 +16,7 @@
 
 Name|Value
 ---|---
-<#= $"Assembly|{Type.Namespace.Assembly}" #>
+<#= $"Assembly|{Type.Namespace.Assemblyname}" #>
 <#= $"Namespace|{Type.Namespace.Fullname}" #>
 <#= $"Available on|{string.Join(", ", TargetFxs.OrderBy(x => x.Name).Select(x => x.Name))}" #>
 

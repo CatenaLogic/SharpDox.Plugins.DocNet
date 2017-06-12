@@ -180,7 +180,7 @@ if (Documentation.Exceptions.Count > 0)
             this.Write("\n\n**");
             
             #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\DocumentationData.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(parameter.Key));
+            this.Write(this.ToStringHelper.ToStringWithCulture(exception.Key));
             
             #line default
             #line hidden

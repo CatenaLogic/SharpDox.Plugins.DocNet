@@ -56,7 +56,7 @@ namespace SharpDox.Plugins.DocNet.Templates.Repository
             this.Write("\n\nName|Value\n---|---\n");
             
             #line 1 "C:\Source\SharpDox.Plugins.DocNet\src\SharpDox.Plugins.DocNet\Templates\Repository\TypeData.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture($"Assembly|{Type.Namespace.Assembly}"));
+            this.Write(this.ToStringHelper.ToStringWithCulture($"Assembly|{Type.Namespace.Assemblyname}"));
             
             #line default
             #line hidden

@@ -78,7 +78,7 @@ if (Documentation.Exceptions.Count > 0)
 	{
 #>
 
-**<#= parameter.Key #>**
+**<#= exception.Key #>**
 <#= exception.Value.ToMarkdown(StepInput.SDProject.Tokens).Transform(Helper.TransformLinkToken) #>
 
 <#
