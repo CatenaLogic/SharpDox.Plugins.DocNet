@@ -98,6 +98,11 @@ namespace SharpDox.Plugins.DocNet.Steps
                 };
 
                 var fileName = type.ResolvePath(StepInput.OutputPath);
+                if (string.IsNullOrWhiteSpace(fileName))
+                {
+                    continue;
+                }
+
                 var content = typeData.TransformText();
                 content = content.CleanUp();
 

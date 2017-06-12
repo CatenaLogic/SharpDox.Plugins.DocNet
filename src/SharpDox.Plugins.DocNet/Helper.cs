@@ -26,7 +26,9 @@ namespace SharpDox.Plugins.DocNet
             }
             else if (linkType == "type")
             {
-                link = $"#/{linkType}/{identifier.RemoveIllegalPathChars()}/index";
+                // For now, just return empty navigation to current type
+                link = "#";
+                //link = $"#/{linkType}/{identifier.RemoveIllegalPathChars()}/index";
             }
             else if (linkType == "article")
             {
