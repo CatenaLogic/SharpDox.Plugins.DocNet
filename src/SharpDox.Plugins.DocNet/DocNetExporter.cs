@@ -60,7 +60,10 @@ namespace SharpDox.Plugins.DocNet
                 var steps = new List<StepBase>();
                 steps.Add(new PreStep(0, 5));
                 steps.Add(new CopyResourcesStep(25, 25));
-                steps.Add(new CreateDataStep(50, 100));
+                steps.Add(new CreateDataStep(50, 100)
+                {
+	                IgnorePrivateMembers = _config.IgnorePrivateMembers
+                });
 
                 foreach (var step in steps)
                 {

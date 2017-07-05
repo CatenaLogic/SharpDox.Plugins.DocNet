@@ -13,7 +13,7 @@ namespace SharpDox.Plugins.DocNet
 
     internal static class StringExtensions
     {
-        public static bool IsPrivateMember(this string accessibility)
+        public static bool IsNonPublic(this string accessibility)
         {
             return !accessibility.Contains("public");
         }

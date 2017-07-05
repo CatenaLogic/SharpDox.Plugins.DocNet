@@ -18,9 +18,12 @@ namespace SharpDox.Plugins.DocNet.Steps
 
     internal class CreateDataStep : StepBase
     {
-        public CreateDataStep(int progressStart, int progressEnd) : base(new StepRange(progressStart, progressEnd))
+        public CreateDataStep(int progressStart, int progressEnd) 
+			: base(new StepRange(progressStart, progressEnd))
         {
         }
+
+		public bool IgnorePrivateMembers { get; set; }
 
         public override void RunStep()
         {
@@ -89,10 +92,16 @@ namespace SharpDox.Plugins.DocNet.Steps
                 var type = sdType.Value.First().Item1;
                 var targetFxs = sdType.Value.Select(x => x.Item2).ToList();
 
+	            if (IgnorePrivateMembers && type.Accessibility.IsNonPublic())
+	            {
+		            continue;
+	            }
+
                 ExecuteOnStepMessage(string.Format(StepInput.DocNetStrings.CreatingTypeData, type));
 
                 var typeData = new TypeData
                 {
+					IgnorePrivateMembers = IgnorePrivateMembers,
                     Type = type,
                     TargetFxs = targetFxs.ToArray()
                 };

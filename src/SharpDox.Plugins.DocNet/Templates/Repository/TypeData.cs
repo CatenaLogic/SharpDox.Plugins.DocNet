@@ -170,7 +170,7 @@ if (Type.Fields.Count > 0)
 
 	foreach (var sdField in Type.Fields)
 	{
-		if (IgnorePrivateMembers && sdField.Accessibility.IsPrivateMember())
+		if (IgnorePrivateMembers && sdField.Accessibility.IsNonPublic())
 		{
 			continue;
 		}
@@ -207,7 +207,7 @@ if (Type.Constructors.Count > 0)
 
 	foreach (var sdConstructor in Type.Constructors)
 	{
-		if (IgnorePrivateMembers && sdConstructor.Accessibility.IsPrivateMember())
+		if (IgnorePrivateMembers && sdConstructor.Accessibility.IsNonPublic())
 		{
 			continue;
 		}
@@ -244,7 +244,7 @@ if (Type.Properties.Count > 0)
 
 	foreach (var sdProperty in Type.Properties)
 	{
-		if (IgnorePrivateMembers && sdProperty.Accessibility.IsPrivateMember())
+		if (IgnorePrivateMembers && sdProperty.Accessibility.IsNonPublic())
 		{
 			continue;
 		}
@@ -281,7 +281,7 @@ if (Type.Events.Count > 0)
 
 	foreach (var sdEvent in Type.Events)
 	{
-		if (IgnorePrivateMembers && sdEvent.Accessibility.IsPrivateMember())
+		if (IgnorePrivateMembers && sdEvent.Accessibility.IsNonPublic())
 		{
 			continue;
 		}
@@ -318,7 +318,7 @@ if (Type.Methods.Count > 0)
 
 	foreach (var sdMethod in Type.Methods)
 	{
-		if (IgnorePrivateMembers && sdMethod.Accessibility.IsPrivateMember())
+		if (IgnorePrivateMembers && sdMethod.Accessibility.IsNonPublic())
 		{
 			continue;
 		}
